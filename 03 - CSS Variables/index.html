@@ -33,7 +33,7 @@
       filter: blur(var(--blur));
     }
 
-    .h1 {
+    .hl {
       color: var(--base);
     }
     /*
@@ -59,6 +59,17 @@
   </style>
 
   <script>
+    function inputHandler(e) {
+      console.log(this.name, this.value);
+      const units = this.dataset.sizing || '';
+      // update css variable based on value
+      document.documentElement.style.setProperty(`--${this.name}`, `${this.value}${units}`);
+    }
+
+    const inputs = document.querySelectorAll('.controls input');
+
+    inputs.forEach((input) => input.addEventListener('change', inputHandler));
+    inputs.forEach((input) => input.addEventListener('mousemove', inputHandler));
   </script>
 
 </body>
