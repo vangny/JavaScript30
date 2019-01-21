@@ -68,10 +68,41 @@
       transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
     }
 
+    .hand.second-hand {
+      height: 3px;
+    }
+
+    .hand.hour-hand {
+      width: 35%;
+      right: 50%;
+    }
+
   </style>
 
   <script>
+    const secondHand = document.querySelector('.second-hand');
+    const minuteHand = document.querySelector('.min-hand');
+    const hourHand = document.querySelector('.hour-hand');
 
+    function setDate() {
+      const currentDate = new Date();
+
+      const seconds = currentDate.getSeconds();
+      const minutes = currentDate.getMinutes();
+      const hours = currentDate.getHours();
+
+      const secondsDegree = ((seconds / 60) * 360) + 90;
+      const minutesDegree = ((minutes / 60) * 360) + 90;
+      const hoursDegree = ((hours / 60) * 360) + 270;
+
+      secondHand.style.transform = `rotate(${secondsDegree}deg)`;
+      minuteHand.style.transform = `rotate(${minutesDegree}deg)`;
+      hourHand.style.transform = `rotate(${hoursDegree}deg)`;
+      // console.log(seconds);
+
+    }
+
+    setInterval(setDate, 1000);
 
   </script>
 </body>
