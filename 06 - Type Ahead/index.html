@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <form class="search-form">
+    <input type="text" class="search" placeholder="City or State">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+<script>
+  const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+
+  const cities = [];
+  const search = document.querySelector('.search');
+
+  fetch(endpoint) // async
+    .then(res => res.json())
+    .then(data => cities.push(...data));
+
+  function findMatches(wordsToMatch, cities) {
+    const regex = new RegExp(wordsToMatch, 'i');
+    return cities.filter((city) => city.city.match(regex) || city.state.match(regex));
+  }
+
+  function searchHandler(e) {
+    // console.log(e.target.value);
+    // find the city, state, and population
+    const input = e.target.value;
+    if (input.length >= 3) {
+      // findMatches(input, cities).forEach(city => console.log(city.city, city.state, city.population));
+      const results = findMatches(input, cities).map(({ city, state, population }) => {
+        obj = {city, state, population};
+        return obj
+      })
+      // console.log(results);
+      updateList(results);
+    } else {
+      // explain
+      resetList();
+    }
+  }
+
+  function updateList(results) {
+    const suggestions = document.querySelector('.suggestions');
+    suggestions.innerHTML = ''; // clears list items
+
+    results.forEach((city) => {
+      suggestions.appendChild(createListItem(city));
+    })
+  }
+  
+  function createListItem(city) {
+    let li = document.createElement('li');
+    let name = document.createElement('span');
+    let nameText = document.createTextNode(`${city.city}, ${city.state}`);
+    let population = document.createElement('span');
+    let populationText = document.createTextNode(`${city.population}`);
+
+    name.appendChild(nameText);
+    population.appendChild(populationText);
+    population.classList.add('population');
+
+    li.appendChild(name);
+    li.appendChild(population);
+
+    return li;
+  }
+
+  function resetList() {
+    const suggestions = document.querySelector('.suggestions');
+    suggestions.innerHTML = ''; // clears list items
+    const city = document.createElement('li');
+    const cityText = document.createTextNode('Filter for a city');
+    const state = document.createElement('li');
+    const stateText = document.createTextNode('or a state');
+    
+    city.appendChild(cityText);
+    state.appendChild(stateText);
+    suggestions.appendChild(city);
+    suggestions.appendChild(state);
+  }
+  
+  // console.log(search);
+  search.addEventListener('input', searchHandler);
+
+</script>
+</body>
+</html>
