@@ -61,7 +61,7 @@
     let name = document.createElement('span');
     let nameText = document.createTextNode(`${city.city}, ${city.state}`);
     let population = document.createElement('span');
-    let populationText = document.createTextNode(`${city.population}`);
+    let populationText = document.createTextNode(`${city.population.replace(/(.)(?=(\d{3})+$)/g,'$1,')}`);
 
     name.appendChild(nameText);
     population.appendChild(populationText);
